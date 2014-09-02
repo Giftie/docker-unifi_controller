@@ -17,16 +17,14 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 # we don't need and apt cache in a container
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
-RUN mkdir -p /var/log/supervisor /usr/lib/unifi/data && \ touch /usr/lib/unifi/data/.unifidatadir
+RUN mkdir -p /var/log/supervisor /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
 
 RUN apt-get update -q -y
 RUN apt-get install -q -y supervisor apt-utils lsb-release curl wget rsync
 
 # add ubiquity repo + key
 RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiquiti" > /etc/apt/sources.list.d/ubiquity.list && \
-   apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 && \
-   apt-get update -q -y && \
-   apt-get install -q -y unifi-stable
+   apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 && apt-get update -q -y && apt-get install -q -y unifi-stable
 
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
