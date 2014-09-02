@@ -30,4 +30,4 @@ VOLUME /usr/lib/unifi/data
 EXPOSE 8443 8080 27117
 WORKDIR /usr/lib/unifi
 
-CMD ["service unifi stop && service unifi start && tail -f /var/log/unifi/server.log"]
+CMD ["/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java", "-Xmx1024M", "-jar", "/usr/lib/unifi/lib/ace.jar", "start"]
