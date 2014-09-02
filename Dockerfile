@@ -29,3 +29,5 @@ RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiq
 VOLUME /usr/lib/unifi/data
 EXPOSE 8443 8080 27117
 WORKDIR /usr/lib/unifi
+
+CMD ["service unifi stop && service unifi start && tail -f /var/log/unifi/server.log"]
