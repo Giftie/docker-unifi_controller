@@ -27,7 +27,7 @@ RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiq
    apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 && apt-get update -q -y && apt-get install -q -y unifi-rapid
    
 VOLUME /usr/lib/unifi/data
-EXPOSE 8443 8080 27117
+EXPOSE  3478 8080 8081 8443 8843 8880 27117 
 WORKDIR /usr/lib/unifi
 
 CMD ["/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java", "-Xmx1024M", "-jar", "/usr/lib/unifi/lib/ace.jar", "start"]
