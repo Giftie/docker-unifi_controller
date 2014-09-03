@@ -25,20 +25,20 @@ RUN apt-get update
 
 #modify iptables
 # SSH
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 22 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 22 --state NEW -j ACCEPT
 # Unifi - Device Inform & Management
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8080:8081 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8080:8081 --state NEW -j ACCEPT
 # Unifi - HTTPS Management
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8443 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8443 --state NEW -j ACCEPT
 # Unifi - Guest Portal Redirect (SSL)
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8843 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8843 --state NEW -j ACCEPT
 # Unifi - Guest Portal Redirect
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8880 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8880 --state NEW -j ACCEPT
 # Webmin
-RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state NEW -j ACCEPT
+RUN iptables -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state NEW -j ACCEPT
 # Ubiquiti AP Discovery
-RUN iptables -t nat -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
-RUN iptables -t nat -A INPUT -j DROP
+RUN iptables -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
+RUN iptables -A INPUT -j DROP
 
 # add ubiquity repo + key
 RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiquiti" > /etc/apt/sources.list.d/ubiquity.list && \
