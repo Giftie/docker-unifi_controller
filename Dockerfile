@@ -17,6 +17,14 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 # we don't need and apt cache in a container
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
+RUN mkdir -p /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
+
+RUN apt-get update -q -y
+RUN apt-get install -q -y apt-utils lsb-release curl wget rsync
+RUN apt-get update
+RUN apt-get install iptables
+RUN apt-get install iptables-persistent
+
 #modify iptables
 # SSH
 RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 22 --state NEW -j ACCEPT
@@ -33,11 +41,6 @@ RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state 
 # Ubiquiti AP Discovery
 RUN iptables -t nat -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
 RUN iptables -t nat -A INPUT -j DROP
-
-RUN mkdir -p /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
-
-RUN apt-get update -q -y
-RUN apt-get install -q -y apt-utils lsb-release curl wget rsync
 
 # add ubiquity repo + key
 RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiquiti" > /etc/apt/sources.list.d/ubiquity.list && \
