@@ -17,6 +17,23 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 # we don't need and apt cache in a container
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
+#modify iptables
+# SSH
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 22 --state NEW -j ACCEPT
+# Unifi - Device Inform & Management
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8080:8081 --state NEW -j ACCEPT
+# Unifi - HTTPS Management
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8443 --state NEW -j ACCEPT
+# Unifi - Guest Portal Redirect (SSL)
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8843 --state NEW -j ACCEPT
+# Unifi - Guest Portal Redirect
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 8880 --state NEW -j ACCEPT
+# Webmin
+RUN iptables -t nat -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state NEW -j ACCEPT
+# Ubiquiti AP Discovery
+RUN iptables -t nat -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
+RUN iptables -t nat -A INPUT -j DROP
+
 RUN mkdir -p /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
 
 RUN apt-get update -q -y
@@ -27,7 +44,7 @@ RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiq
    apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 && apt-get update -q -y && apt-get install -q -y unifi-rapid
    
 VOLUME /usr/lib/unifi/data
-EXPOSE  3478 8080 8081 8443 8843 8880 27117 
+EXPOSE  3478 8080 8081 8443 8843 8880 10001 27117 
 WORKDIR /usr/lib/unifi
 
 CMD ["/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java", "-Xmx1024M", "-jar", "/usr/lib/unifi/lib/ace.jar", "start"]
