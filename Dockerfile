@@ -9,9 +9,6 @@ MAINTAINER giftie giftie61@hotmail.com
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
-
 # this forces dpkg not to call sync() after package extraction and speeds up install
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 # we don't need and apt cache in a container
@@ -39,6 +36,9 @@ RUN iptables -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state NEW -j 
 # Ubiquiti AP Discovery
 RUN iptables -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
 RUN iptables -A INPUT -j DROP
+
+RUN usermod -u 99 nobody
+RUN usermod -g 100 nobody
 
 # add ubiquity repo + key
 RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiquiti" > /etc/apt/sources.list.d/ubiquity.list && \
