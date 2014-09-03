@@ -20,10 +20,8 @@ RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 RUN mkdir -p /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
 
 RUN apt-get update -q -y
-RUN apt-get install -q -y apt-utils lsb-release curl wget rsync
+RUN apt-get install -q -y apt-utils lsb-release curl wget rsync iptables iptables-persistent
 RUN apt-get update
-RUN apt-get install iptables
-RUN apt-get install iptables-persistent
 
 #modify iptables
 # SSH
