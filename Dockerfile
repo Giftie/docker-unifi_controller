@@ -14,31 +14,14 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 # we don't need and apt cache in a container
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
+RUN usermod -u 99 nobody
+RUN usermod -g 100 nobody
+
 RUN mkdir -p /usr/lib/unifi/data && touch /usr/lib/unifi/data/.unifidatadir
 
 RUN apt-get update -q -y
-RUN apt-get install -q -y apt-utils lsb-release curl wget rsync iptables iptables-persistent
+RUN apt-get install -q -y apt-utils lsb-release curl wget rsync
 RUN apt-get update
-
-#modify iptables
-# SSH
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 22 --state NEW -j ACCEPT
-# Unifi - Device Inform & Management
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8080:8081 --state NEW -j ACCEPT
-# Unifi - HTTPS Management
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8443 --state NEW -j ACCEPT
-# Unifi - Guest Portal Redirect (SSL)
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8843 --state NEW -j ACCEPT
-# Unifi - Guest Portal Redirect
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 8880 --state NEW -j ACCEPT
-# Webmin
-RUN iptables -A INPUT -p tcp -m tcp -m state --dport 10000:10010 --state NEW -j ACCEPT
-# Ubiquiti AP Discovery
-RUN iptables -A INPUT -p udp -m udp --dport 10001 --sport 10001 -j ACCEPT
-RUN iptables -A INPUT -j DROP
-
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
 
 # add ubiquity repo + key
 RUN echo "deb http://www.ubnt.com/downloads/unifi/distros/deb/ubuntu ubuntu ubiquiti" > /etc/apt/sources.list.d/ubiquity.list && \
