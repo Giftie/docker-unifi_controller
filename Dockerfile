@@ -1,4 +1,4 @@
-#docker run -d -p 2222:22 -p 8080:8080 -p 8443:8443 -p 37117:27117 -v /mnt/cache/appdata/unifi/data:/usr/lib/unifi/data --name unifi rednut/unifi-controller
+# docker run -d -p 2222:22 -p 8080:8080 -p 8443:8443 -p 27117:27117 -p 10001:10001 -p 8081:8081 -p 3478:3478 -p 8843:8843 -p 8880:8880 -v /mnt/cache/appdata/unifi:/usr/lib/unifi/data --name unifi giftie/unifi-controller
 
 # build docker image to run the unifi controller
 #
